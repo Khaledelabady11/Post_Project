@@ -1,6 +1,10 @@
 class Api::V1::PostsController < ApplicationController
+  CACHE_KEY = 'POSTS_CACHED'
+  after_action :cache_response, only: [:index]
+  before_action :check_cache, only: [:index]
+
   def index
-    @posts = Post.all
+    @posts ||= Post.all
     render json: @posts
   end
 
@@ -21,6 +25,16 @@ class Api::V1::PostsController < ApplicationController
   end
 
   private
+
+  def cache_response
+    REDIS_CLIENT.set CACHE_KEY, response.body
+  end
+
+  def check_cache
+    @posts = REDIS_CLIENT.get(CACHE_KEY)
+  end
+
+
 
   def post_params
     params.require(:post).permit(:title, :content)
