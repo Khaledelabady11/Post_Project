@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Posts', type: :request do
-  let!(:articles) { create_list(:todo, 20) }
+  let!(:articles) { create_list(:post, 20) }
   let(:article_id) { articles.first.id }
 
   describe 'GET /index' do

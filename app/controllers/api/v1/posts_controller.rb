@@ -34,8 +34,6 @@ class Api::V1::PostsController < ApplicationController
     @posts = REDIS_CLIENT.get(CACHE_KEY)
   end
 
-
-
   def post_params
     params.require(:post).permit(:title, :content)
   end
